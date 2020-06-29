@@ -18,12 +18,12 @@ function App() {
       maximumAge: 0
     };
     
-    function success(pos) {
+    async function success(pos) {
       var crd = pos.coords;
       const latitude = crd.latitude;
       const longitude = crd.longitude;
 
-      fetch(`${api.base}weather?lat=${latitude}&lon=${longitude}&units=${units}&appid=${api.key}`)
+      await fetch(`${api.base}weather?lat=${latitude}&lon=${longitude}&units=${units}&appid=${api.key}`)
         .then(res => res.json())
         .then(result => {
           setWeather(result);
