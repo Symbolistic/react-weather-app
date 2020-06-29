@@ -27,7 +27,6 @@ function App() {
         .then(res => res.json())
         .then(result => {
           setWeather(result);
-          console.log(result) 
       });
     }
     
@@ -70,9 +69,9 @@ function App() {
         return "App rain"
       } else if (weather.snow) {
         return "App snow";
-      } else if (weather.main.temp < 16) {
+      } else if (weather.main.temp <= 5) {
       return "App cold";
-    } else if (weather.main.temp >= 27)  {
+    } else if (weather.main.temp >= 24)  {
       return "App hot";
     } else {
       return "App";
@@ -82,7 +81,7 @@ function App() {
       return "App rain";
     } else if (weather.snow) {
       return "App snow";
-    } else if (weather.main.temp < 30) {
+    } else if (weather.main.temp <= 41) {
       return "App cold";
     } else if (weather.main.temp >= 75)  {
       return "App hot";
