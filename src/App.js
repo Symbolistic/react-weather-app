@@ -6,6 +6,13 @@ const api = {
   base: "https://api.openweathermap.org/data/2.5/"
 }
 
+/* The reason I put this here is because of an async issue, everytime I changed the "units" STATE with setUnit,
+the background updated too early, before we were able to fetch the new temperature info. So basically what happens
+is when you click 15 Celsius, it changess to 15 Fahrenheit instead of converting the temperature first.
+So it would show a cold temperature background, which is wrong. To fix this, I'm adding an outside variable
+to control the current unit, this variable will be changed/updated AFTER successfully fetching the updated info.*/
+let currentUnit = "metric";
+
 function App() {
   const [weather, setWeather] = useState({});
   const [query, setQuery] = useState('');
@@ -26,6 +33,7 @@ function App() {
       await fetch(`${api.base}weather?lat=${latitude}&lon=${longitude}&units=${units}&appid=${api.key}`)
         .then(res => res.json())
         .then(result => {
+          currentUnit = units;
           setWeather(result);
       });
     }
@@ -64,7 +72,7 @@ function App() {
   }
 
   const handleBackground = () => {
-    if (units === "metric") {
+    if (currentUnit === "metric") {
       if (weather.rain) {
         return "App rain"
       } else if (weather.snow) {
