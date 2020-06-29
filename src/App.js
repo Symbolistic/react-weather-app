@@ -125,7 +125,7 @@ function App() {
 
           <div className="weather-box" onClick={() => units === "metric" ? setUnits("imperial") : setUnits("metric")}>
             <p className="info">Click anywhere to change metrics</p>
-            <div className="temp">{Math.round(currentTemp)}{units === "imperial" ? "°F" : "°c"}</div>
+            <div className="temp">{Math.round(currentTemp)}{units === "imperial" ? "°F" : "°C"}</div>
             <div className="weather">{weather.weather[0].main}</div>
           </div>
         </div>
