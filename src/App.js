@@ -12,12 +12,13 @@ is when you click 15 Celsius, it changess to 15 Fahrenheit instead of converting
 So it would show a cold temperature background, which is wrong. To fix this, I'm adding an outside variable
 to control the current unit, this variable will be changed/updated AFTER successfully fetching the updated info.*/
 let currentUnit = "metric";
+let currentTemp = 0;
 
 function App() {
   const [weather, setWeather] = useState({});
   const [query, setQuery] = useState('');
   const [units, setUnits] = useState('metric');
-
+  
   useEffect(() => {
     var options = {
       enableHighAccuracy: true,
@@ -34,6 +35,7 @@ function App() {
         .then(res => res.json())
         .then(result => {
           currentUnit = units;
+          currentTemp = result.main.temp;
           setWeather(result);
       });
     }
@@ -52,6 +54,7 @@ function App() {
       fetch(`${api.base}weather?q=${query}&units=${units}&appid=${api.key}`)
         .then(res => res.json())
         .then(result => {
+          currentTemp = result.main.temp;
           setWeather(result);
           setQuery('');
         });
@@ -122,7 +125,7 @@ function App() {
 
           <div className="weather-box" onClick={() => units === "metric" ? setUnits("imperial") : setUnits("metric")}>
             <p className="info">Click anywhere to change metrics</p>
-            <div className="temp">{Math.round(weather.main.temp)}{units === "imperial" ? "°F" : "°c"}</div>
+            <div className="temp">{Math.round(currentTemp)}{units === "imperial" ? "°F" : "°c"}</div>
             <div className="weather">{weather.weather[0].main}</div>
           </div>
         </div>
