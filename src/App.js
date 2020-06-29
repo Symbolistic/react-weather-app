@@ -22,10 +22,6 @@ function App() {
       var crd = pos.coords;
       const latitude = crd.latitude;
       const longitude = crd.longitude;
-      console.log('Your current position is:');
-      console.log(`Latitude : ${latitude}`);
-      console.log(`Longitude: ${longitude}`);
-      console.log(`More or less ${crd.accuracy} meters.`);
 
       fetch(`${api.base}weather?lat=${latitude}&lon=${longitude}&units=${units}&appid=${api.key}`)
         .then(res => res.json())
@@ -51,7 +47,6 @@ function App() {
         .then(result => {
           setWeather(result);
           setQuery('');
-          console.log(result)
         });
     }
   }
