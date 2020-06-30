@@ -45,7 +45,7 @@ function App() {
     }
     
     navigator.geolocation.getCurrentPosition(success, error, options);
-  }, [units]);
+  }, []);
     
 
 
@@ -54,10 +54,14 @@ function App() {
       fetch(`${api.base}weather?q=${query}&units=${units}&appid=${api.key}`)
         .then(res => res.json())
         .then(result => {
-          currentTemp = result.main.temp;
+          currentTemp = result.main.temp ? result.main.temp : 0;
           setWeather(result);
           setQuery('');
-        });
+        })
+        .catch(err => {
+          setQuery("Invalid City!");
+          console.log("Invalid City")
+        })
     }
   }
 
@@ -74,15 +78,28 @@ function App() {
     return `${day} ${month} ${date} ${year}`
   }
 
+  const handleUnits = () => {
+
+    if (units === "metric") {
+      currentTemp = Math.round((currentTemp * 1.8)+32)
+      currentUnit = "imperial";
+      setUnits("imperial");
+     } else {      
+       currentTemp = Math.round((currentTemp - 32)/1.8)
+       currentUnit = "metric";
+      setUnits("metric");
+     } 
+  }
+
   const handleBackground = () => {
     if (currentUnit === "metric") {
       if (weather.rain) {
         return "App rain"
       } else if (weather.snow) {
         return "App snow";
-      } else if (weather.main.temp <= 5) {
+      } else if (currentTemp <= 5) {
       return "App cold";
-    } else if (weather.main.temp >= 24)  {
+    } else if (currentTemp >= 24)  {
       return "App hot";
     } else {
       return "App";
@@ -92,9 +109,9 @@ function App() {
       return "App rain";
     } else if (weather.snow) {
       return "App snow";
-    } else if (weather.main.temp <= 41) {
+    } else if (currentTemp <= 41) {
       return "App cold";
-    } else if (weather.main.temp >= 75)  {
+    } else if (currentTemp >= 75)  {
       return "App hot";
     } else {
       return "App";
@@ -123,8 +140,8 @@ function App() {
             <div className="date">{dateBuilder(new Date())}</div>
           </div>
 
-          <div className="weather-box" onClick={() => units === "metric" ? setUnits("imperial") : setUnits("metric")}>
-            <p className="info">Click anywhere to change metrics</p>
+          <div className="weather-box" onClick={() => handleUnits()}>
+            <p className="info">Click below to change metrics</p>
             <div className="temp">{Math.round(currentTemp)}{units === "imperial" ? "°F" : "°C"}</div>
             <div className="weather">{weather.weather[0].main}</div>
           </div>
